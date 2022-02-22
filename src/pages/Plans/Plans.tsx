@@ -6,6 +6,8 @@ import {
   Fade,
   CircularProgress,
   Snackbar,
+  useTheme,
+  alpha,
 } from "@mui/material";
 import { getAllPlans } from "../../services/plans/plans.service";
 import {
@@ -19,6 +21,8 @@ import ActionBar from "../../components/molecules/ActionBar";
 import PlanCard from "../../components/organisms/PlanCard";
 
 export default function Plans() {
+  const theme = useTheme();
+
   const [plans, setPlans] = useState<IPlan[]>([]);
   const [tariffs, setTariffs] = useState<ITariff[]>([]);
   const [minutes, setMinutes] = useState("");
@@ -165,7 +169,10 @@ export default function Plans() {
                   paddingY: 5,
                   paddingX: 10,
                   borderRadius: 100,
-                  border: "1px solid blue",
+                  border: `2px solid ${alpha(
+                    theme.palette.primary.light,
+                    0.8
+                  )}`,
                   justifyContent: "center",
                   alignItems: "center",
                 }}
