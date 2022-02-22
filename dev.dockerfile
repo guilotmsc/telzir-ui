@@ -10,7 +10,7 @@ COPY package*.json ./
 
 COPY --chown=node:node . .
 
-RUN yarn install
+RUN npm install
 ENV NODE_PATH /home/node/app/node_modules/
 COPY . .
 
