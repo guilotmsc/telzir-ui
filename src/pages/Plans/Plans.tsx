@@ -5,6 +5,7 @@ import {
   Typography,
   Fade,
   CircularProgress,
+  Snackbar,
 } from "@mui/material";
 import { getAllPlans } from "../../services/plans/plans.service";
 import {
@@ -21,13 +22,14 @@ export default function Plans() {
   const [plans, setPlans] = useState<IPlan[]>([]);
   const [tariffs, setTariffs] = useState<ITariff[]>([]);
   const [minutes, setMinutes] = useState("");
-  const [price, setPrice] = useState<number>();
+  const [price, setPrice] = useState<number | null>();
 
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [selectedPlan, setSelectedPlan] = useState<IPlan>();
   const [selectedTariff, setSelectedTariff] = useState<ITariff>();
 
   const [isLoading, setIsLoading] = useState(true);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     getPlans();
@@ -58,6 +60,14 @@ export default function Plans() {
   }, [selectedPlan, selectedTariff, minutes]);
 
   const consultPrice = async () => {
+    if (!selectedPlan) return;
+
+    if (parseInt(minutes) < selectedPlan?.free_minutes) {
+      setPrice(null);
+      setOpen(true);
+      return;
+    }
+
     const params = {
       plan: selectedPlan?.id,
       tariff: selectedTariff?.id,
@@ -201,6 +211,13 @@ export default function Plans() {
             handleConfirm={consultPrice}
           />
         </Container>
+
+        <Snackbar
+          open={open}
+          autoHideDuration={6000}
+          onClose={() => setOpen(false)}
+          message="A quantidade de minutos inserida é menor que a quantidade gratuita de minutos do plano"
+        />
       </Container>
     </React.Fragment>
   );
